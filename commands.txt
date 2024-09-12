@@ -1,0 +1,32 @@
+dotnet new sln
+dotnet new webapi -o API -controllers
+dotnet new classlib -o Core
+dotnet new classlib -o Infrastructure
+dotnet sln add API/
+dotnet sln add Core/
+dotnet sln add Infrastructure/
+dotnet sln list (to check projects) (Dependency)[API --> Infrastructure --> Core]
+cd API
+dotnet add reference ../Infrastructure/
+cd ..
+cd Infrastructure
+dotnet add reference ../Core/
+cd ..
+dotnet restore
+dotnet build
+
+-- run project --
+cd API/
+dotnet run or dotnet watch
+
+-- create docker container sql --
+docker compose up -d 
+
+-- install dotnet ef --
+dotnet tool install --global dotnet-ef --version 8.0.8
+
+-- Migration --
+dotnet ef migrations add InitialCreate -s API -p Infrastructure
+
+-- Remove migration --
+dotnet ef migrations remove -s API -p Infrastructure
